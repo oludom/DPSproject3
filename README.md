@@ -81,3 +81,51 @@ Starting election in: node3
 higher node array [5002]
 Coordinator is node2 
 ```
+
+
+
+program flow:
+
+import ...
+create app()
+get_free_port_and_node_name()
+create logger()
+generate_node_id()
+create Bully(name, id, port) 
+
+register_service(name, port, id)
+
+create routes()
+  /response
+    -> runs new Thread init
+      if own node id > incoming request node id
+
+  /announce
+    -> receives coordinator announcement
+      saves it in bully object
+  
+  /proxy
+    -> counts incoming requests during election and will only forward one call to own response api
+
+  / 
+    -> node health check, responds with 200
+
+
+main: 
+  app.run()
+
+after 15s:
+  init()
+    get_ports_of_nodes()
+    get_details() of all nodes
+    ready_for_election()
+    get_higher_nodes()
+      announce()
+        if no higher nodes
+    or
+      elect_higher_nodes()
+        if there are higher nodes
+
+    
+after 20s: 
+  check_coordinator_health()

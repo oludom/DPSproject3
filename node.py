@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
-from util_methods import register_service, get_ports_of_nodes, generate_node_id, get_higher_nodes, election, \
-    announce, ready_for_election, get_details, check_health_of_the_service
+from util_methods import register_service, get_ports_of_nodes, generate_node_id, get_higher_nodes, elect_higher_nodes, \
+    announce, ready_for_election, get_details, check_health_of_the_service, check_node_available, get_free_port_and_node_name
 from bully import Bully
 import threading
 import time
@@ -10,15 +10,19 @@ import requests
 from multiprocessing import Value
 import logging
 
+
 counter = Value('i', 0)
 app = Flask(__name__)
 
-# verifying if port number and node name have been entered as command line arguments.
-port_number = int(sys.argv[1])
-assert port_number
+# # verifying if port number and node name have been entered as command line arguments.
+# port_number = int(sys.argv[1])
+# assert port_number
 
-node_name = sys.argv[2]
-assert node_name
+# node_name = sys.argv[2]
+# assert node_name
+
+port_number, node_name = get_free_port_and_node_name()
+
 
 # saving the API logs to a file
 logging.basicConfig(filename=f"logs/{node_name}.log", level=logging.INFO)
@@ -27,7 +31,7 @@ logging.basicConfig(filename=f"logs/{node_name}.log", level=logging.INFO)
 learner_result_array = []
 
 node_id = generate_node_id()
-bully = Bully(node_name, node_id, port_number)
+bully = Bully(node_name, node_id, port_number, port_number)
 
 # register service in the Service Registry
 service_register_status = register_service(node_name, port_number, node_id)
@@ -43,8 +47,8 @@ def init(wait=True):
 
         if wait:
             timeout = random.randint(5, 15)
-            time.sleep(timeout)
             print('timeouting in %s seconds' % timeout)
+            time.sleep(timeout)
 
         # checks if there is an election on going
         election_ready = ready_for_election(ports_of_all_nodes, bully.election, bully.coordinator)
@@ -60,7 +64,7 @@ def init(wait=True):
                 print('Coordinator is : %s' % node_name)
                 print('**********End of election**********************')
             else:
-                election(higher_nodes_array, node_id)
+                elect_higher_nodes(higher_nodes_array, node_id)
     else:
         print('Service registration is not successful')
 
@@ -123,19 +127,30 @@ def proxy():
 
     return jsonify({'Response': 'OK'}), 200
 
+@app.route('/')
+def index():
+    return jsonify({'response': 'OK'}), 200
+
 
 # No node spends idle time, they always checks if the master node is alive in each 60 seconds.
 def check_coordinator_health():
-    threading.Timer(60.0, check_coordinator_health).start()
+    threading.Timer(20.0, check_coordinator_health).start()
     health = check_health_of_the_service(bully.coordinator)
-    if health == 'crashed':
-        init()
+    if not health:
+        print('Coordinator unreachable. Starting election.')
+        init(False)
     else:
         print('Coordinator is alive')
 
 
-timer_thread1 = threading.Timer(15, init)
+timer_thread1 = threading.Timer(2, init)
 timer_thread1.start()
+
+timer_thread2 = threading.Timer(20, check_coordinator_health)
+timer_thread2.start()
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=port_number)
+
+
+
