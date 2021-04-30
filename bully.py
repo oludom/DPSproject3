@@ -1,4 +1,4 @@
-from consul_connector import ConsulService
+from connector import ConnectionService
 
 
 class Bully:
@@ -11,7 +11,7 @@ class Bully:
     #     self.coordinator = coordinator
 
     def __init__(self):
-        self._connection = ConsulService()
+        self._connection = ConnectionService()
         self._election = False
         self._coordinator = False
         self._currentCoordinatorIp = self._connection._ip
