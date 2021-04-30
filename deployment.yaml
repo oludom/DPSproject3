@@ -1,0 +1,38 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: dpsp3registryservice
+# spec:
+#   selector:
+#     app: dpsp3registry
+#   ports:
+#   - protocol: "TCP"
+#     port: 5000
+#     targetPort: 5000
+#   type: LoadBalancer
+
+# apiVersion: v1
+# kind: ConfigMap
+# metadata: 
+#   name: dps-configmap
+#   namespace: dps
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dpsp3node
+spec:
+  selector:
+    matchLabels:
+      app: dpsp3node
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: dpsp3node
+    spec:
+      containers:
+      - name: dpsp3node
+        image: eld3rb3rry/dpsp3node:latest
+        ports:
+        - containerPort: 5000
