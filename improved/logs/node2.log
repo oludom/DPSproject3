@@ -1,0 +1,5 @@
+INFO:werkzeug: * Running on http://127.0.0.1:5002/ (Press CTRL+C to quit)
+INFO:werkzeug: * Running on http://127.0.0.1:5002/ (Press CTRL+C to quit)
+INFO:werkzeug:127.0.0.1 - - [30/Apr/2021 12:42:09] "[37mPOST /announce HTTP/1.1[0m" 200 -
+INFO:werkzeug: * Running on http://127.0.0.1:5002/ (Press CTRL+C to quit)
+INFO:werkzeug:127.0.0.1 - - [30/Apr/2021 12:53:46] "[37mPOST /announce HTTP/1.1[0m" 200 -
