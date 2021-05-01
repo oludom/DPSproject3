@@ -29,6 +29,11 @@ def electionMessage():
     b.receiveElectionMessage(flask.request.remote_addr)
     return jsonify({'response': 'OK'}), 200
 
+@app.route('/answer')
+def answer():
+    b.answer()
+    return jsonify({'response': 'OK'}), 200
+
 @app.route('/coordinator')
 def coordinator():
     b.coordinator(flask.request.remote_addr)
@@ -37,7 +42,7 @@ def coordinator():
 
 # No node spends idle time, they always checks if the master node is alive in each 60 seconds.
 def check_coordinator_health():
-    threading.Timer(10, check_coordinator_health).start()
+    threading.Timer(30, check_coordinator_health).start()
     if not b._coordinator:
             
         if not b.checkCoordinator():
@@ -52,7 +57,7 @@ def init():
 
 timer_thread1 = threading.Timer(random.randint(5, 15), init)
 timer_thread1.start()
-timer_thread2 = threading.Timer(20, check_coordinator_health)
+timer_thread2 = threading.Timer(30, check_coordinator_health)
 timer_thread2.start()
 
 if __name__ == '__main__':

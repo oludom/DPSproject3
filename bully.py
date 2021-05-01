@@ -1,5 +1,6 @@
 from connector import ConnectionService
-
+import threading
+import time
 
 class Bully:
 
@@ -39,19 +40,15 @@ class Bully:
             self._announceCoordinator(nodes)
         else:
             # elect higher nodes
-            answers = False
             for i in range(len(higher)):
-                answers = answers | self._connection.sendElectionMessage(higher[i])
-            # if no answer received, send victory message and become coordinator
-            if not answers:
-                self._announceCoordinator(nodes)
-            else:
-                return # don't do anything if you get an answer
-        # if answer from higher node received, don't send any more messages and wait for victory message
-        # if answer from lower node received, restart election
-        return 
+                self._connection.sendElectionMessage(higher[i])
+            # set timer for checking answers
+            threading.Timer(3, self._electionTimeout).start()
     
     def receiveElectionMessage(self, ip):
+        if self._coordinator:
+            self._announceCoordinator([ip])
+            return
         print('bully.receiveElectionMessage', flush=True)
         print("remote ip: ", ip, flush=True)
         if self.compareIpHigher(self._connection._ip, ip):
@@ -59,11 +56,13 @@ class Bully:
             self._election = False
         else:
             self.sendElectionMessage()
+            self._connection.sendAnswer(ip)
     
-    # # answers election message (alive)
-    # def answer(self):
-    #     if self._election:
-    #         self._election= False
+    # answers election message (alive)
+    def answer(self):
+        if self._election:
+            self._election= False
+
 
     # coordinator message (victory)
     def coordinator(self, ip):
@@ -79,11 +78,18 @@ class Bully:
 
     def checkCoordinator(self):
         print('bully.checkCoordinator', flush=True)
-        self._connection.checkNodeAvailable(self._currentCoordinatorIp)
+        return self._connection.checkNodeAvailable(self._currentCoordinatorIp)
 
     def _announceCoordinator(self, nodes):
+        print("bully.announceCoordinator: ", nodes)
         self._election = False
         self._coordinator = True
         # announce coordinator
         for i in range(len(nodes)):
             self._connection.sendCoordinatorMessage(nodes[i])
+
+    def _electionTimeout(self):
+        if self._election:
+            nodes = self._connection.getNodeList()
+            nodes.remove(self._connection._ip)
+            self._announceCoordinator(nodes)
