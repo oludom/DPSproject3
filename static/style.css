@@ -1,4 +1,8 @@
 
+div {
+    font-family: Garamond;
+}
+
 /**
  ** GRID TABLES
 **/
@@ -83,61 +87,8 @@ hr{
 }
 
 
-.element h2{
-	margin: 0;
-	padding: 0;
-}
-.element input, select, textarea{
-	font-size: 1.2vw;
-	line-height: 1.4vw;
-	padding: 0;
-	margin: 0;
-	border: none;
-	width: 100%;
-	background: none;
-}
 .bordered{
 	border-top: 2px solid gray;
 	border-bottom: 2px solid gray;
 	border: 2px solid gray;
-}
-.link, a{
-	color: rgb(0,51,102) !important;
-	text-decoration: none;
-	padding: 5px;
-}
-.link, a:hover{
-	color: black !important;
-}
-.right{
-	text-align: right;
-}
-.relative{
-	position: relative;
-}
-.element input[type="submit"] a{
-	text-decoration: none;
-}
-.element input[type="radio"], .element input[type="checkbox"] {
-	width: 70%;
-	float: right;
-	position: absolute;
-	top: 5px;
-	right: 20%;
-	left: 40px;
-}
-
-.element label{
-	position: relative;
-}
-
-.question_overlay{
-	position: absolute;
-	opacity: 0;
-	background: white;
-	-webkit-transition: opacity 1s; /* Safari */
-    transition: opacity 1s;
-}
-.relative:hover .question_overlay{
-	opacity: 1;
 }
