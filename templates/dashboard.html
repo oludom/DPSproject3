@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>My Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Dashboard</h1>
+
+    <div class="input_table">
+        <div class="element third head">node name</div>
+        <div class="element third head">node ip</div>
+        <div class="element third head">current leader</div>
+        {% for node in nodeList %}
+            <div class="element third">{{node.name}}</div>
+            <div class="element third">{{node.ip}}</div>
+            <div class="element third">{{node.leader}}</div>
+        {% endfor %}
+
+        <div class="element full head">total message count: {{messageTotal}}</div>
+    </div>
+
+    
+
+</body>
+</html>

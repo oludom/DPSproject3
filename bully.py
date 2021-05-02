@@ -93,3 +93,14 @@ class Bully:
             nodes = self._connection.getNodeList()
             nodes.remove(self._connection._ip)
             self._announceCoordinator(nodes)
+
+    def getNodeList(self):
+        return self._connection.getNodeList()
+
+    def getDetails(self):
+        return {
+            'ip': self._connection._ip,
+            'name': self._connection._name,
+            'leader': self._currentCoordinatorIp,
+            'totalMessageCount': self._connection.getMessageCount()
+        }
