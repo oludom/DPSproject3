@@ -31,8 +31,17 @@ class Bully:
         if len(higher) < 1: 
             self._announceCoordinator(nodes)
         else:
+            # --- START original bully algorithm ---
+            # send election to higher nodes
+            # for i in range (len(higher)):
+            #     self._connection.sendElectionMessage(higher[i])
+            # --- END original bully algorithm ---
+
+            # --- START improved bully algorithm ---
             # elect highest node
             self._connection.sendElectionMessage(higher[-1])
+            # --- END improved bully algorithm ---
+
             # set timer for checking answers
             threading.Timer(3, self._electionTimeout).start()
     
