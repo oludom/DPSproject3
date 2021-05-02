@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: headless-service
 spec:
-  clusterIP: None # <-- Don't forget!!
+  clusterIP: None
   selector:
     app: dpsp3node
   ports:

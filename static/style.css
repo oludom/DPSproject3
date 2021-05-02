@@ -1,0 +1,143 @@
+
+/**
+ ** GRID TABLES
+**/
+
+.input_table {
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-auto-rows: minmax(1.7vw, auto);
+	grid-gap: 10px;
+    }
+
+.element {
+	font-size: 1.2vw;
+	line-height: 1.4vw;
+}
+
+.quater{
+	grid-column-end: span 3;
+}
+.threequater{
+	grid-column-end: span 9;
+}
+.third{
+	grid-column-end: span 4;
+}
+.twothird{
+	grid-column-end: span 8;
+}
+.half{
+	grid-column-end: span 6;
+}
+.full{
+	grid-column-end: span 12;
+}
+
+.borderline{
+	grid-row-end: span 2;
+}
+.head{
+	font-weight: bold;
+	height: 30px;
+}
+hr{
+	border: 1px solid black;
+}
+
+.one{
+	grid-column-end: span 1;
+}
+.two{
+	grid-column-end: span 2;
+}
+.three{
+	grid-column-end: span 3;
+}
+.four{
+	grid-column-end: span 4;
+}
+.five{
+	grid-column-end: span 5;
+}
+.six{
+	grid-column-end: span 6;
+}
+.seven{
+	grid-column-end: span 7;
+}
+.eight{
+	grid-column-end: span 8;
+}
+.nine{
+	grid-column-end: span 9;
+}
+.ten{
+	grid-column-end: span 10;
+}
+.eleven{
+	grid-column-end: span 11;
+}
+.twelve{
+	grid-column-end: span 12;
+}
+
+
+.element h2{
+	margin: 0;
+	padding: 0;
+}
+.element input, select, textarea{
+	font-size: 1.2vw;
+	line-height: 1.4vw;
+	padding: 0;
+	margin: 0;
+	border: none;
+	width: 100%;
+	background: none;
+}
+.bordered{
+	border-top: 2px solid gray;
+	border-bottom: 2px solid gray;
+	border: 2px solid gray;
+}
+.link, a{
+	color: rgb(0,51,102) !important;
+	text-decoration: none;
+	padding: 5px;
+}
+.link, a:hover{
+	color: black !important;
+}
+.right{
+	text-align: right;
+}
+.relative{
+	position: relative;
+}
+.element input[type="submit"] a{
+	text-decoration: none;
+}
+.element input[type="radio"], .element input[type="checkbox"] {
+	width: 70%;
+	float: right;
+	position: absolute;
+	top: 5px;
+	right: 20%;
+	left: 40px;
+}
+
+.element label{
+	position: relative;
+}
+
+.question_overlay{
+	position: absolute;
+	opacity: 0;
+	background: white;
+	-webkit-transition: opacity 1s; /* Safari */
+    transition: opacity 1s;
+}
+.relative:hover .question_overlay{
+	opacity: 1;
+}
