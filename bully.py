@@ -3,22 +3,12 @@ import threading
 import time
 
 class Bully:
-
-    # def __init__(self, node_name, node_id, port_number, election=False, coordinator=False):
-    #     self.node_name = node_name
-    #     self.node_id = node_id
-    #     self.port = port_number
-    #     self.election = election
-    #     self.coordinator = coordinator
-
     def __init__(self):
         self._connection = ConnectionService()
         self._election = False
         self._coordinator = False
         self._currentCoordinatorIp = self._connection._ip
-        
-
-
+    
     # join network
     def join(self):
         self.sendElectionMessage()
@@ -29,19 +19,20 @@ class Bully:
         self._election = True
 
         nodes = self._connection.getNodeList()
-        print("nodesList:", nodes, flush=True)
+        # print("nodesList:", nodes, flush=True)
         nodes.remove(self._connection._ip)
-        print("nodesList:", nodes, flush=True)
+        # print("nodesList:", nodes, flush=True)
         # send to higher numbered nodes
         higher = list(filter(lambda x: self.compareIpHigher(self._connection._ip, x) , nodes)) 
         # if no higher nodes, you are leader
+        higher.sort(key=lambda x: bytes(map(int, x.split('.'))))
+
         print("higher:", higher, flush=True)
         if len(higher) < 1: 
             self._announceCoordinator(nodes)
         else:
-            # elect higher nodes
-            for i in range(len(higher)):
-                self._connection.sendElectionMessage(higher[i])
+            # elect highest node
+            self._connection.sendElectionMessage(higher[-1])
             # set timer for checking answers
             threading.Timer(3, self._electionTimeout).start()
     
@@ -49,8 +40,8 @@ class Bully:
         if self._coordinator:
             self._announceCoordinator([ip])
             return
-        print('bully.receiveElectionMessage', flush=True)
-        print("remote ip: ", ip, flush=True)
+        # print('bully.receiveElectionMessage', flush=True)
+        # print("remote ip: ", ip, flush=True)
         if self.compareIpHigher(self._connection._ip, ip):
             # other is leader, wait for victory
             self._election = False
@@ -66,7 +57,7 @@ class Bully:
 
     # coordinator message (victory)
     def coordinator(self, ip):
-        print('bully.coordinator', flush=True)
+        # print('bully.coordinator', flush=True)
         self._coordinator = False
         self._currentCoordinatorIp = ip
         self._election = False

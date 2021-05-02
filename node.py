@@ -11,12 +11,9 @@ import socket
 
 hostname = socket.gethostname()
 local_ip = socket.gethostbyname(hostname)
-print(hostname, local_ip)
-
+# print(hostname, local_ip)
 
 app = Flask(__name__)
-
-node_name = "node0"
 
 b = Bully()
 
@@ -44,23 +41,19 @@ def coordinator():
 def check_coordinator_health():
     threading.Timer(30, check_coordinator_health).start()
     if not b._coordinator:
-            
         if not b.checkCoordinator():
             b.sendElectionMessage()
     else: 
         print("I am coordinator and alive.", flush=True)
     return
 
-
 def init():
     b.join()
 
-timer_thread1 = threading.Timer(random.randint(5, 15), init)
+timer_thread1 = threading.Timer(random.randint(20, 30), init)
 timer_thread1.start()
-timer_thread2 = threading.Timer(30, check_coordinator_health)
+timer_thread2 = threading.Timer(50, check_coordinator_health)
 timer_thread2.start()
 
 if __name__ == '__main__':
     app.run(host=local_ip, port=5000)
-
-
