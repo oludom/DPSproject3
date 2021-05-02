@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: headless-service
+spec:
+  clusterIP: None # <-- Don't forget!!
+  selector:
+    app: dpsp3node
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
