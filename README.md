@@ -2,6 +2,8 @@
 
 This repository contains a project, which explores leader election in distributed systems. The project was done for the course Distributed and Pervasive Systems at Aarhus University. The Bully Algorithm was implemented in python and uses Flask for simple network communication and a small ui, showing the state of the network. 
 
+Some parts of the implementation were inspired by this Git repository: https://github.com/isuruuy429/Masters/tree/master/BullyAlgorithm
+
 To run the code, make sure the minikube is started - `$ minikube start`.
 
 Buld and push the docker image:
